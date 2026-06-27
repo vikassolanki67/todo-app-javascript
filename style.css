@@ -1,0 +1,189 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+    
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(
+        135deg,
+        #667eea,
+        #764ba2
+    );
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:30px;
+}
+
+.container{
+    width:100%;
+    max-width:850px;
+}
+
+.todo-box{
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(255,255,255,0.2);
+    border-radius:25px;
+    padding:35px;
+    box-shadow:
+    0 8px 32px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:white;
+    margin-bottom:30px;
+    font-size:2.2rem;
+    letter-spacing:1px;
+}
+
+.input-section{
+    margin-bottom:30px;
+}
+
+#taskInput{
+    width:100%;
+    padding:16px;
+    border:none;
+    outline:none;
+    border-radius:14px;
+    font-size:16px;
+    margin-bottom:15px;
+}
+
+.bottom-inputs{
+    display:flex;
+    gap:12px;
+}
+
+#expireDate{
+    flex:1;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+    outline:none;
+    font-size:15px;
+}
+
+#addBtn{
+    border:none;
+    background:#22c55e;
+    color:white;
+    padding:14px 24px;
+    border-radius:14px;
+    cursor:pointer;
+    font-weight:600;
+    transition:.3s;
+}
+
+#addBtn:hover{
+    transform:translateY(-2px);
+    background:#16a34a;
+}
+
+.task-list{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.task-card{
+    background:white;
+    border-radius:18px;
+    padding:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    transition:.3s;
+}
+
+.task-card:hover{
+    transform:translateY(-3px);
+}
+
+.task-content{
+    display:flex;
+    gap:15px;
+}
+
+.complete-btn{
+    width:40px;
+    height:40px;
+    border:none;
+    border-radius:50%;
+    background:#e5e7eb;
+    cursor:pointer;
+    font-size:18px;
+    transition:.3s;
+}
+
+.complete-btn:hover{
+    transform:scale(1.08);
+}
+
+.task-info h3{
+    color:#111827;
+    margin-bottom:10px;
+}
+
+.task-info p{
+    color:#6b7280;
+    margin-bottom:4px;
+    font-size:14px;
+}
+
+.delete-btn{
+    border:none;
+    background:#fee2e2;
+    color:#dc2626;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:16px;
+    transition:.3s;
+}
+
+.delete-btn:hover{
+    background:#dc2626;
+    color:white;
+}
+
+.completed{
+    background:#dcfce7;
+}
+
+.completed .complete-btn{
+    background:#22c55e;
+    color:white;
+}
+
+.completed h3{
+    text-decoration:line-through;
+    color:#6b7280;
+}
+
+@media(max-width:700px){
+
+    .bottom-inputs{
+        flex-direction:column;
+    }
+
+    #addBtn{
+        width:100%;
+    }
+
+    .task-card{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .delete-btn{
+        align-self:flex-end;
+    }
+}
