@@ -141,9 +141,12 @@ h1{
 
 .task-info p{
     color:#6b7280;
-    margin-bottom:5px;
+    margin-bottom:6px;
     font-size:13px;
     line-height:1.5;
+    display:flex;
+    align-items:center;
+    gap:6px;
 }
 
 .delete-btn{

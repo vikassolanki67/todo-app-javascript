@@ -117,13 +117,13 @@ function renderTasks()
       let startDate = document.createElement('p');
       startDate.classList.add('start-date');
 
-      startDate.innerText=element.StartDate;
+      startDate.innerText = "📅 Created : " + element.StartDate;
 
       // Expire Date 
       let endDate = document.createElement('p');
       endDate.classList.add('end-date');
 
-      endDate.innerText=element.ExpiredDate;
+      endDate.innerText = "⏳ Due : " + element.ExpiredDate;
 
 
       // praents <<-- child
