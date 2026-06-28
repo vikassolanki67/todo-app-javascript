@@ -143,19 +143,21 @@ function renderTasks()
       // praents <<-- child
 
       // praents <<-- child {1}
+      // Header
       taskHeader.appendChild(taskName);
       taskHeader.appendChild(DeleteButton);
 
+      // Task Info
       taskInfo.appendChild(taskHeader);
       taskInfo.appendChild(startDate);
       taskInfo.appendChild(endDate);
-      
-      // praents <<-- child {2}
-      card.appendChild(cardContant);
 
-      // praents <<-- child {3}
+      // Card Content
+      cardContant.appendChild(complateButton);
+      cardContant.appendChild(taskInfo);
+
+      // Card
       card.appendChild(cardContant);
-      card.appendChild(DeleteButton);
 
       // Completed Hai To Styling
       

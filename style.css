@@ -71,8 +71,6 @@ h1{
     font-size:15px;
     background:#fff;
     color:#333;
-    appearance:none;
-    -webkit-appearance:none;
     min-height:52px;
 }
 
@@ -247,7 +245,5 @@ h1{
     .task-info p{
         font-size:13px;
     }
-    .delete-btn{
-        align-self:flex-end;
-    }
+
 }
