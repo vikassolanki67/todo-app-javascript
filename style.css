@@ -49,7 +49,7 @@ h1{
 
 #taskInput{
     width:100%;
-    padding:16px;
+    padding:16px 18px;
     border:none;
     outline:none;
     border-radius:14px;
@@ -64,7 +64,7 @@ h1{
 
 #expireDate{
     flex:1;
-    padding:14px;
+    padding:16px 18px;
     border:none;
     border-radius:14px;
     outline:none;
@@ -178,7 +178,12 @@ h1{
     .bottom-inputs{
         flex-direction:column;
     }
-
+    
+    #taskInput,
+    #expireDate{
+        font-size:15px;
+        padding:15px 16px;
+    }
     #addBtn{
         width:100%;
     }
