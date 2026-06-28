@@ -2,276 +2,211 @@
 // DOM SELECTION
 // ================================
 
-// Task Input Select
-   const taskInput =document.querySelector("#taskInput");
-   
-// Date Input Select
-   const expireDate =document.querySelector("#expireDate");
-   let date= new Date();
-   
-   let year=date.getFullYear();
-   let month=((date.getMonth()+1)).toString().padStart(2,"0");
-   let tarik=date.getDate().toString().padStart(2,"0");
-   expireDate.min= `${year}-${month}-${tarik}`;
-   
-// Add Button Select
-   const addBtn =document.querySelector("#addBtn");
-// Task Container Select
-   let Container = document.querySelector(".task-list");
-  
-   
-   
+const taskInput  = document.querySelector("#taskInput");
+const expireDate = document.querySelector("#expireDate");
+const addBtn     = document.querySelector("#addBtn");
+const Container  = document.querySelector(".task-list");
+
+// Set today as minimum date
+(function setMinDate() {
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = String(today.getMonth() + 1).padStart(2, "0");
+    const d = String(today.getDate()).padStart(2, "0");
+    expireDate.min = `${y}-${m}-${d}`;
+})();
+
+
 // ================================
 // MAIN DATA
 // ================================
 
-// Tasks Array
-// LocalStorage se data load karna hai ya empty array rakhna hai?
-   let AllTasks = JSON.parse(localStorage.getItem("Alltask")) || [];
+let AllTasks = [];
+try {
+    const stored = JSON.parse(localStorage.getItem("Alltask")) || [];
+    AllTasks = stored.filter(t => t && t.id && t.taskname && t.ExpiredDate && t.StartDate);
+} catch (e) {
+    AllTasks = [];
+    localStorage.removeItem("Alltask");
+}
 
 
-/*
-================================
-PAGE LOAD
-================================
+// ================================
+// SAVE TO LOCALSTORAGE
+// ================================
 
-1. LocalStorage Read
-2. Tasks Array Me Store
-3. Render Function Call
-*/
+function saveTasks() {
+    localStorage.setItem("Alltask", JSON.stringify(AllTasks));
+}
 
-renderTasks();
+
+// ================================
+// TOAST NOTIFICATION
+// ================================
+
+function showToast(message) {
+    let toast = document.getElementById("toast");
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "toast";
+        toast.className = "toast";
+        document.body.appendChild(toast);
+    }
+    toast.innerText = message;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2500);
+}
+
+
+// ================================
+// DATE FORMAT
+// ================================
+
+function formatDate(dateString) {
+    const [y, m, d] = dateString.split("-").map(Number);
+    const date = new Date(y, m - 1, d);
+    return date.toLocaleDateString("en-GB", {
+        day: "2-digit", month: "short", year: "numeric"
+    });
+}
+
 
 // ================================
 // RENDER FUNCTION
 // ================================
 
-/*
+function renderTasks() {
+    Container.innerHTML = "";
 
-Purpose:
+    if (AllTasks.length === 0) {
+        Container.innerHTML = `
+            <div class="empty-state">
+                <span class="empty-icon">📋</span>
+                <p>Koi task nahi hai. Upar se task add karo!</p>
+            </div>`;
+        return;
+    }
 
-Tasks Array
-    ↓
-Screen Par Task Cards
+    AllTasks.forEach(function(element) {
 
-Steps:
+        // ---------- Card ----------
+        const card = document.createElement("div");
+        card.className = "task-card" + (element.complated ? " completed" : "");
 
-1. Container Clear
-2. Loop Through Tasks Array
-3. Har Task Ka Card Create
-4. Card Container Me Append
+        // ---------- Card Content wrapper ----------
+        const cardContent = document.createElement("div");
+        cardContent.className = "task-content";
 
-*/
-function formatDate(dateString){
+        // ---------- Complete Button ----------
+        const completeBtn = document.createElement("button");
+        completeBtn.className = "complete-btn";
+        completeBtn.textContent = element.complated ? "✔" : "○";
+        completeBtn.setAttribute("data-id", String(element.id));
 
-    const date = new Date(dateString);
+        // ---------- Task Info ----------
+        const taskInfo = document.createElement("div");
+        taskInfo.className = "task-info";
 
-    const options = {
-        day:"2-digit",
-        month:"short",
-        year:"numeric"
-    };
+        // Task Header row
+        const taskHeader = document.createElement("div");
+        taskHeader.className = "task-header";
 
-    return date.toLocaleDateString("en-GB",options);
+        const taskName = document.createElement("h3");
+        taskName.className = "task-name";
+        taskName.textContent = element.taskname;   // ← textContent, no XSS
 
-}
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "delete-btn";
+        deleteBtn.textContent = "❌";
+        deleteBtn.setAttribute("data-id", String(element.id));
 
-function renderTasks()
- {
+        taskHeader.appendChild(taskName);
+        taskHeader.appendChild(deleteBtn);
 
-// Container Empty
-   Container.innerHTML="";
-   console.log(Container);
-// Loop Through Tasks
-   AllTasks.forEach(element => {
-            
-        
-      // Create Card
-      
-      let card = document.createElement('div');
-      card.classList.add('task-card');
+        // Dates
+        const startDateEl = document.createElement("p");
+        startDateEl.className = "start-date";
+        startDateEl.textContent = "📅 Created : " + formatDate(element.StartDate);
 
-      let cardContant = document.createElement('div');
-      cardContant.classList.add('task-content');
-      
-      
-      // Complete Button
-      let  complateButton = document.createElement('button');
-      complateButton.classList.add('complete-btn');
-      if(element.complated == true){
-         complateButton.innerText = '✔';
-      }
-      else{
-         complateButton.innerText = '○';
-      }
-      complateButton.setAttribute("data-id",element.id);
+        const endDateEl = document.createElement("p");
+        endDateEl.className = "end-date";
+        endDateEl.textContent = "⏳ Due : " + formatDate(element.ExpiredDate);
 
-      // Task Name
-      let taskInfo = document.createElement('div');
-      taskInfo.classList.add('task-info');
+        // Assemble
+        taskInfo.appendChild(taskHeader);
+        taskInfo.appendChild(startDateEl);
+        taskInfo.appendChild(endDateEl);
 
+        cardContent.appendChild(completeBtn);
+        cardContent.appendChild(taskInfo);
+        card.appendChild(cardContent);
+        Container.appendChild(card);
 
-
-      let taskName = document.createElement('h3');
-      taskName.classList.add('task-name');
-
-      taskName.innerText=element.taskname;
-      // Header (Task Name + Delete Button)
-      let taskHeader = document.createElement('div');
-      taskHeader.classList.add('task-header');
-      // Delete Button
-      let DeleteButton = document.createElement('button');
-      DeleteButton.classList.add('delete-btn');
-      
-      DeleteButton.innerText='❌';
-      DeleteButton.setAttribute("data-id",element.id);
-
-
-      // Created Date
-      let startDate = document.createElement('p');
-      startDate.classList.add('start-date');
-
-      startDate.innerText = "📅 Created : " + formatDate(element.StartDate);
-
-      // Expire Date 
-      let endDate = document.createElement('p');
-      endDate.classList.add('end-date');
-
-      endDate.innerText = "⏳ Due : " + formatDate(element.ExpiredDate);
-
-
-      // praents <<-- child
-
-      // praents <<-- child {1}
-      // Header
-      taskHeader.appendChild(taskName);
-      taskHeader.appendChild(DeleteButton);
-
-      // Task Info
-      taskInfo.appendChild(taskHeader);
-      taskInfo.appendChild(startDate);
-      taskInfo.appendChild(endDate);
-
-      // Card Content
-      cardContant.appendChild(complateButton);
-      cardContant.appendChild(taskInfo);
-
-      // Card
-      card.appendChild(cardContant);
-
-      // Completed Hai To Styling
-      
-      if(element.complated == true){
-         card.classList.add('completed');
-
-      }
-      else{}
-
-      
-      // Append Card
-         
-      Container.appendChild(card);
-      });
-
-      const buttons = document.querySelectorAll(".complete-btn");
-      buttons.forEach(button => {
-         button.addEventListener("click",()=>{
-            console.log("Complete Button Clicked");
-            AllTasks.forEach(element => {
-            console.log(typeof button.getAttribute("data-id"));
-            console.log(typeof element.id);
-            console.log(button.getAttribute("data-id"), element.id);
-            if(button.getAttribute("data-id")==element.id){
-               if(element.complated == true){
-                  element.complated =false;
-               }
-               else if(element.complated == false){
-                  element.complated = true;
-               }
+        // ---------- Events ----------
+        completeBtn.addEventListener("click", function() {
+            const id = this.getAttribute("data-id");
+            const task = AllTasks.find(t => String(t.id) === id);
+            if (task) {
+                task.complated = !task.complated;
+                saveTasks();
+                renderTasks();
+                showToast(task.complated ? "✅ Task complete!" : "🔄 Task incomplete kiya");
             }
+        });
 
-            });
-            let Tamanna=JSON.stringify(AllTasks);
-            localStorage.setItem("Alltask",Tamanna);
+        deleteBtn.addEventListener("click", function() {
+            const id = this.getAttribute("data-id");
+            AllTasks = AllTasks.filter(t => String(t.id) !== id);
+            saveTasks();
             renderTasks();
-         })
-      });
-
-      const deleteButtons = document.querySelectorAll(".delete-btn");
-      deleteButtons.forEach(button => {
-         button.addEventListener("click", () => {
-            AllTasks = AllTasks.filter(element => {
-               return element.id != button.getAttribute("data-id")
-            });
-            let Tamanna=JSON.stringify(AllTasks);
-            localStorage.setItem("Alltask",Tamanna);
-            renderTasks();
-         });
-      });
-
+            showToast("🗑️ Task delete ho gaya");
+        });
+    });
 }
 
 
+// ================================
+// ADD TASK
+// ================================
 
+addBtn.addEventListener("click", function() {
+    const inputName        = taskInput.value.trim();
+    const inputExpiredDate = expireDate.value;
 
-addBtn.addEventListener("click",()=>{
-    let Inputname=  taskInput.value.trim();
-    let InputExpiredDate = expireDate.value;
+    if (!inputName && !inputExpiredDate) { showToast("⚠️ Task aur date dono likhein!"); return; }
+    if (!inputName)        { showToast("⚠️ Task ka naam likhein..."); return; }
+    if (!inputExpiredDate) { showToast("⚠️ Due date choose karein..."); return; }
 
-    if(Inputname ==""&&InputExpiredDate==""){
-      alert("Enter the Task And Choose the Date");
-    }
-    else if(Inputname==""){
-      alert("Enter the Task...");
-    }
-    else if(InputExpiredDate==""){
-      alert("Choose the Date...");
-    }
-    else{
-         let date= new Date();
-         let year=date.getFullYear();
-         let month=((date.getMonth()+1)).toString().padStart(2,"0");
-         let tarik=date.getDate().toString().padStart(2,"0");
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = String(today.getMonth() + 1).padStart(2, "0");
+    const d = String(today.getDate()).padStart(2, "0");
 
-         const task={
-            id :Date.now(),
-            taskname:Inputname,                   
-            ExpiredDate:InputExpiredDate,
-            StartDate:`${year}-${month}-${tarik}`,
-            complated:false
-         }    
+    AllTasks.push({
+        id: Date.now(),
+        taskname: inputName,
+        ExpiredDate: inputExpiredDate,
+        StartDate: `${y}-${m}-${d}`,
+        complated: false
+    });
 
-         AllTasks.push(task);
-         Tamanna=JSON.stringify(AllTasks);
-         localStorage.setItem("Alltask",Tamanna);
+    saveTasks();
+    renderTasks();
+    showToast("✨ Task add ho gaya!");
 
-         renderTasks();
-      
-         taskInput.value= "";
-         expireDate.value = ""
-      
-    }
+    taskInput.value  = "";
+    expireDate.value = "";
+    taskInput.focus();
+});
 
-
-})
-
-
+// Enter key support
+taskInput.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") addBtn.click();
+});
 
 
 // ================================
-// FUTURE FEATURES
+// PAGE LOAD — sirf ek baar
 // ================================
 
-/*
-
-Filter All
-
-Filter Completed
-
-Search
-
-Edit Task
-
-Dark Mode
-
-*/
+renderTasks();
