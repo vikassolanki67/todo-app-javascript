@@ -123,14 +123,16 @@ h1{
 }
 
 .complete-btn{
-    width:40px;
-    height:40px;
+    width:36px;
+    height:36px;
     border:none;
     border-radius:50%;
     background:#e5e7eb;
     cursor:pointer;
-    font-size:18px;
+    font-size:16px;
     transition:.3s;
+    margin-top:2px;
+    flex-shrink:0;
 }
 
 .complete-btn:hover{
