@@ -199,9 +199,24 @@ h1{
     }
     .task-card{
         flex-direction:column;
-        gap:15px;
+        gap:14px;
+        padding:14px;
+    }
+    .task-content{
+        width:100%;
     }
 
+    .task-info{
+        width:100%;
+    }
+
+    .task-info h3{
+        font-size:17px;
+    }
+
+    .task-info p{
+        font-size:13px;
+    }
     .delete-btn{
         align-self:flex-end;
     }
