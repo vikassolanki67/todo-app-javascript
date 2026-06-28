@@ -157,15 +157,16 @@ h1{
 }
 
 .delete-btn{
+    width:34px;
+    height:34px;
     border:none;
+    border-radius:50%;
     background:#fee2e2;
     color:#dc2626;
-    width:40px;
-    height:40px;
-    border-radius:50%;
     cursor:pointer;
-    font-size:16px;
+    font-size:15px;
     transition:.3s;
+    flex-shrink:0;
 }
 
 .delete-btn:hover{
@@ -185,6 +186,18 @@ h1{
 .completed h3{
     text-decoration:line-through;
     color:#6b7280;
+}
+.task-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:8px;
+}
+
+.task-name{
+    flex:1;
+    margin:0;
 }
 
 @media(max-width:700px){

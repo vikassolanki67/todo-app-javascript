@@ -104,7 +104,9 @@ function renderTasks()
       taskName.classList.add('task-name');
 
       taskName.innerText=element.taskname;
-
+      // Header (Task Name + Delete Button)
+      let taskHeader = document.createElement('div');
+      taskHeader.classList.add('task-header');
       // Delete Button
       let DeleteButton = document.createElement('button');
       DeleteButton.classList.add('delete-btn');
@@ -129,13 +131,15 @@ function renderTasks()
       // praents <<-- child
 
       // praents <<-- child {1}
-      taskInfo.appendChild(taskName);
+      taskHeader.appendChild(taskName);
+      taskHeader.appendChild(DeleteButton);
+
+      taskInfo.appendChild(taskHeader);
       taskInfo.appendChild(startDate);
       taskInfo.appendChild(endDate);
       
       // praents <<-- child {2}
-      cardContant.appendChild(complateButton)
-      cardContant.appendChild(taskInfo)
+      card.appendChild(cardContant);
 
       // praents <<-- child {3}
       card.appendChild(cardContant);
